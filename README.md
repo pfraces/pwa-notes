@@ -1,8 +1,17 @@
-PWA Offline-First PoC
-=====================
+# PWA Offline-First PoC
 
-Objetivos
----------
+## Primeros pasos
+
+```
+git clone https://github.com/pfraces/pwa-notes
+cd pwa-notes
+npm install
+npm start
+```
+
+Accede a la aplicación navegando a <http://localhost:8080>
+
+## Objetivos
 
 Resolver dudas sobre el enfoque Offline-First
 
@@ -27,8 +36,7 @@ Resolver dudas sobre el enfoque Offline-First
 - [ ] Experiencia de usuario en cada modo
 - [ ] Funcionalidades disponibles en cada modo
 
-PoC Stack
----------
+## PoC Stack
 
 ### Client
 
