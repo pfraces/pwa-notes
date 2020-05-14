@@ -4,7 +4,7 @@
   "description": "PWA Notes",
   "scripts": {
     "client": "vue-cli-service serve",
-    "server": "node server/server.js",
+    "server": "nodemon --ignore server/db.json server/server.js",
     "start": "concurrently --kill-others \"npm run client\" \"npm run server\""
   },
   "dependencies": {
@@ -25,6 +25,7 @@
     "express": "^4.17.1",
     "lowdb": "^1.0.0",
     "morgan": "^1.10.0",
+    "nodemon": "^2.0.4",
     "vue-template-compiler": "^2.6.11"
   },
   "license": "ISC"
