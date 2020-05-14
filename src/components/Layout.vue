@@ -20,7 +20,7 @@
 
 <style scoped>
 .md-app {
-  max-height: 100vh;
+  height: 100vh;
   border: 1px solid rgba(#000, 0.12);
 }
 </style>
@@ -52,33 +52,26 @@ const serverSync = function({ deleted, doc, changes }) {
   const rev = getRevision(changes);
 
   if (deleted) {
-    // DELETE
-    console.log('DELETE', doc._id);
-
     axios.delete(`http://localhost:3000/api/notes/${doc._id}`);
     return;
   }
 
   if (rev === 1) {
-    // POST
-    console.log('POST', doc);
-
     axios.post(`http://localhost:3000/api/notes`, {
       _id: doc._id,
       title: doc.title,
       content: doc.content
     });
+
     return;
   }
 
   if (rev > 1) {
-    // PUT
-    console.log('PUT', doc);
-
     axios.put(`http://localhost:3000/api/notes/${doc._id}`, {
       title: doc.title,
       content: doc.content
     });
+
     return;
   }
 };
