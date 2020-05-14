@@ -3,28 +3,20 @@
     <md-app md-waterfall md-mode="fixed">
       <md-app-toolbar class="md-primary">
         <h3 class="md-title" style="flex: 1">PWA Notes</h3>
-        <md-button class="md-primary" @click="showDialog = true">Create</md-button>
+        <md-button class="md-primary" @click="handleCardToCreate">Create</md-button>
       </md-app-toolbar>
 
       <md-app-content>
-        <Board />
+        <Board v-bind:cards="cards" v-on:edit-modal="handleCardToEdit" />
+        <Modal
+          v-bind:showModal="showModal"
+          v-bind:newCard="newCard"
+          v-bind:cardToEdit="cardtoEdit"
+          v-bind:mode="modalMode"
+          v-on:close-modal="handleCloseModal"
+        />
       </md-app-content>
     </md-app>
-
-    <md-dialog :md-active.sync="showDialog">
-      <md-field>
-        <md-input placeholder="Title" v-model="newCard.title"></md-input>
-      </md-field>
-
-      <md-field>
-        <md-textarea placeholder="Content" v-model="newCard.content"></md-textarea>
-      </md-field>
-
-      <md-dialog-actions>
-        <md-button class="md-primary" @click="showDialog = false">Cancel</md-button>
-        <md-button class="md-primary" @click="showDialog = false">Save</md-button>
-      </md-dialog-actions>
-    </md-dialog>
   </div>
 </template>
 
@@ -33,34 +25,72 @@
   max-height: 100vh;
   border: 1px solid rgba(#000, 0.12);
 }
-
-.md-dialog /deep/ .md-dialog-container {
-  transform: none;
-  width: 370px;
-  padding: 10px;
-}
-
-.md-dialog /deep/ .md-textarea {
-  height: 160px;
-}
 </style>
 
 <script>
 import Board from './Board.vue';
+import Modal from './Modal.vue';
+
+const loremIpsum =
+  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae maxime? Quae non explicabo, neque.';
 
 export default {
   name: 'Layout',
   components: {
-    Board
+    Board,
+    Modal
   },
   data: function() {
     return {
-      showDialog: false,
+      showModal: false,
+      modalMode: 'create',
       newCard: {
         title: '',
         content: ''
-      }
+      },
+      cardtoEdit: { title: '', content: '' },
+      cards: [
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum }
+      ]
     };
+  },
+  methods: {
+    handleCloseModal(closeModal) {
+      this.showModal = closeModal;
+    },
+    handleCardToEdit(data) {
+      this.cardtoEdit = {
+        ...this.cardtoEdit,
+        title: data.title,
+        content: data.content
+      };
+      this.modalMode = 'edit';
+      this.showModal = true;
+    },
+    handleCardToCreate() {
+      this.modalMode = 'create';
+      this.showModal = true;
+    }
   }
 };
 </script>

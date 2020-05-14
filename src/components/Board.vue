@@ -8,7 +8,7 @@
       <md-card-content>{{ card.content }}</md-card-content>
 
       <md-card-actions>
-        <md-button>Edit</md-button>
+        <md-button v-on:click="$emit('edit-modal', {title: card.title, content: card.content})">Edit</md-button>
         <md-button>Delete</md-button>
       </md-card-actions>
     </md-card>
@@ -25,38 +25,9 @@
 </style>
 
 <script>
-const loremIpsum =
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae maxime? Quae non explicabo, neque.';
-
 export default {
   name: 'App',
   components: {},
-  data: function() {
-    return {
-      cards: [
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum }
-      ]
-    };
-  }
+  props: ['cards']
 };
 </script>
