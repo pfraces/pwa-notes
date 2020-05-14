@@ -41,8 +41,8 @@ Resolver dudas sobre el enfoque Offline-First
 ### Client
 
 - [Vue](https://vuejs.org/v2/guide/)
-- [Vue CLI](https://cli.vuejs.org/guide/)
 - [Vue Material](https://vuematerial.io/getting-started)
+- [PouchDB](https://pouchdb.com/getting-started.html)
 
 ### Server
 
