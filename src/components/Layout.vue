@@ -13,16 +13,16 @@
 
     <md-dialog :md-active.sync="showDialog">
       <md-field>
-        <md-input placeholder="Title" v-model="newCard.title"></md-input>
+        <md-input placeholder="Title" v-model="newNote.title"></md-input>
       </md-field>
 
       <md-field>
-        <md-textarea placeholder="Content" v-model="newCard.content"></md-textarea>
+        <md-textarea placeholder="Content" v-model="newNote.content"></md-textarea>
       </md-field>
 
       <md-dialog-actions>
-        <md-button class="md-primary" @click="showDialog = false">Cancel</md-button>
-        <md-button class="md-primary" @click="showDialog = false">Save</md-button>
+        <md-button class="md-primary" @click="closeDialog()">Cancel</md-button>
+        <md-button class="md-primary" @click="createNote(newNote)">Save</md-button>
       </md-dialog-actions>
     </md-dialog>
   </div>
@@ -46,7 +46,19 @@
 </style>
 
 <script>
+import PouchDB from 'pouchdb-browser';
+import { v4 as uid } from 'uuid';
+
 import Board from './Board.vue';
+
+var db = new PouchDB('notes');
+
+const emptyNote = function() {
+  return {
+    title: '',
+    content: ''
+  };
+};
 
 export default {
   name: 'Layout',
@@ -56,11 +68,18 @@ export default {
   data: function() {
     return {
       showDialog: false,
-      newCard: {
-        title: '',
-        content: ''
-      }
+      newNote: emptyNote()
     };
+  },
+  methods: {
+    closeDialog: function() {
+      this.newNote = emptyNote();
+      this.showDialog = false;
+    },
+    createNote: function(newNote) {
+      db.put({ ...newNote, _id: uid() });
+      this.closeDialog();
+    }
   }
 };
 </script>

@@ -1,4 +1,3 @@
-import PouchDB from 'pouchdb-browser';
 import Vue from 'vue';
 
 import VueMaterial from 'vue-material';
