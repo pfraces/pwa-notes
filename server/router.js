@@ -25,7 +25,7 @@ router.post('/notes', function(req, res) {
 
 router.get('/notes/:noteId', function(req, res) {
   const { noteId } = req.params;
-  const note = db.get('notes').find({ id: noteId });
+  const note = db.get('notes').find({ _id: noteId });
   res.send(note.value());
 });
 
@@ -34,7 +34,7 @@ router.put('/notes/:noteId', function(req, res) {
   const note = req.body;
 
   db.get('notes')
-    .find({ id: noteId })
+    .find({ _id: noteId })
     .set(note)
     .write();
 
@@ -45,7 +45,7 @@ router.delete('/notes/:noteId', function(req, res) {
   var { noteId } = req.params;
 
   db.get('notes')
-    .find({ id: noteId })
+    .find({ _id: noteId })
     .remove()
     .write();
 
