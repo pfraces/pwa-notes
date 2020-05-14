@@ -3,28 +3,18 @@
     <md-app md-waterfall md-mode="fixed">
       <md-app-toolbar class="md-primary">
         <h3 class="md-title" style="flex: 1">PWA Notes</h3>
-        <md-button class="md-primary" @click="showDialog = true">Create</md-button>
+        <md-button class="md-primary" @click="createNote()">Create</md-button>
       </md-app-toolbar>
 
       <md-app-content>
-        <Board />
+        <Board v-bind:cards="notes" v-on:edit-modal="editNote" />
+        <NoteDialog
+          v-if="showNoteDialog"
+          v-bind:note="note || undefined"
+          v-on:close="closeNoteDialog()"
+        />
       </md-app-content>
     </md-app>
-
-    <md-dialog :md-active.sync="showDialog">
-      <md-field>
-        <md-input placeholder="Title" v-model="newNote.title"></md-input>
-      </md-field>
-
-      <md-field>
-        <md-textarea placeholder="Content" v-model="newNote.content"></md-textarea>
-      </md-field>
-
-      <md-dialog-actions>
-        <md-button class="md-primary" @click="closeDialog()">Cancel</md-button>
-        <md-button class="md-primary" @click="createNote(newNote)">Save</md-button>
-      </md-dialog-actions>
-    </md-dialog>
   </div>
 </template>
 
@@ -33,52 +23,62 @@
   max-height: 100vh;
   border: 1px solid rgba(#000, 0.12);
 }
-
-.md-dialog /deep/ .md-dialog-container {
-  transform: none;
-  width: 370px;
-  padding: 10px;
-}
-
-.md-dialog /deep/ .md-textarea {
-  height: 160px;
-}
 </style>
 
 <script>
-import PouchDB from 'pouchdb-browser';
-import { v4 as uid } from 'uuid';
-
 import Board from './Board.vue';
+import NoteDialog from './NoteDialog.vue';
 
-var db = new PouchDB('notes');
-
-const emptyNote = function() {
-  return {
-    title: '',
-    content: ''
-  };
-};
+const loremIpsum =
+  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae maxime? Quae non explicabo, neque.';
 
 export default {
   name: 'Layout',
   components: {
-    Board
+    Board,
+    NoteDialog
   },
   data: function() {
     return {
-      showDialog: false,
-      newNote: emptyNote()
+      showNoteDialog: false,
+      note: null,
+      notes: [
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum },
+        { title: 'Lorem Ipsum', content: loremIpsum }
+      ]
     };
   },
   methods: {
-    closeDialog: function() {
-      this.newNote = emptyNote();
-      this.showDialog = false;
+    closeNoteDialog() {
+      this.showNoteDialog = false;
+      this.note = null;
     },
-    createNote: function(newNote) {
-      db.put({ ...newNote, _id: uid() });
-      this.closeDialog();
+    editNote(event) {
+      console.log('editNote called with:', event);
+      this.note = event;
+      this.showNoteDialog = true;
+    },
+    createNote() {
+      this.showNoteDialog = true;
     }
   }
 };
