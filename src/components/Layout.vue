@@ -7,7 +7,7 @@
       </md-app-toolbar>
 
       <md-app-content>
-        <Board v-bind:cards="notes" v-on:edit-modal="editNote" />
+        <Board v-bind:cards="notes" v-on:edit-note="editNote" v-on:delete-note="deleteNote" />
         <NoteDialog
           v-if="showNoteDialog"
           v-bind:note="note || undefined"
@@ -32,6 +32,17 @@ import NoteDialog from './NoteDialog.vue';
 
 var db = new PouchDB('notes');
 
+const retrieveData = function(callback) {
+  db.allDocs({ include_docs: true, descending: true }, (err, doc) => {
+    if (err) {
+      throw err;
+    }
+
+    const data = doc.rows.map(row => row.doc);
+    callback(data);
+  });
+};
+
 export default {
   name: 'Layout',
   components: {
@@ -39,8 +50,17 @@ export default {
     NoteDialog
   },
   created: function() {
-    db.allDocs({ include_docs: true, descending: true }, (err, doc) => {
-      this.notes = doc.rows.map(row => row.doc);
+    db.changes({
+      since: 'now',
+      live: true
+    }).on('change', () => {
+      retrieveData(data => {
+        this.notes = data;
+      });
+    });
+
+    retrieveData(data => {
+      this.notes = data;
     });
   },
   data: function() {
@@ -55,12 +75,15 @@ export default {
       this.showNoteDialog = false;
       this.note = null;
     },
+    createNote() {
+      this.showNoteDialog = true;
+    },
     editNote(event) {
       this.note = event;
       this.showNoteDialog = true;
     },
-    createNote() {
-      this.showNoteDialog = true;
+    deleteNote(event) {
+      db.remove(event);
     }
   }
 };
