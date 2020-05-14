@@ -29,6 +29,7 @@
 import PouchDB from 'pouchdb-browser';
 import Board from './Board.vue';
 import NoteDialog from './NoteDialog.vue';
+import * as axios from 'axios';
 
 var db = new PouchDB('notes');
 
@@ -53,18 +54,31 @@ const serverSync = function({ deleted, doc, changes }) {
   if (deleted) {
     // DELETE
     console.log('DELETE', doc._id);
+
+    axios.delete(`http://localhost:3000/api/notes/${doc._id}`);
     return;
   }
 
   if (rev === 1) {
     // POST
     console.log('POST', doc);
+
+    axios.post(`http://localhost:3000/api/notes`, {
+      _id: doc._id,
+      title: doc.title,
+      content: doc.content
+    });
     return;
   }
 
   if (rev > 1) {
     // PUT
     console.log('PUT', doc);
+
+    axios.put(`http://localhost:3000/api/notes/${doc._id}`, {
+      title: doc.title,
+      content: doc.content
+    });
     return;
   }
 };
