@@ -7,7 +7,7 @@
       </md-app-toolbar>
 
       <md-app-content>
-        <Board v-bind:cards="notes" v-on:edit-modal="editNote" />
+        <Board v-bind:cards="notes" v-on:edit-note="editNote" v-on:delete-note="deleteNote" />
         <NoteDialog
           v-if="showNoteDialog"
           v-bind:note="note || undefined"
@@ -26,11 +26,22 @@
 </style>
 
 <script>
+import PouchDB from 'pouchdb-browser';
 import Board from './Board.vue';
 import NoteDialog from './NoteDialog.vue';
 
-const loremIpsum =
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae maxime? Quae non explicabo, neque.';
+var db = new PouchDB('notes');
+
+const retrieveData = function(callback) {
+  db.allDocs({ include_docs: true, descending: true }, (err, doc) => {
+    if (err) {
+      throw err;
+    }
+
+    const data = doc.rows.map(row => row.doc);
+    callback(data);
+  });
+};
 
 export default {
   name: 'Layout',
@@ -38,33 +49,25 @@ export default {
     Board,
     NoteDialog
   },
+  created: function() {
+    db.changes({
+      since: 'now',
+      live: true
+    }).on('change', () => {
+      retrieveData(data => {
+        this.notes = data;
+      });
+    });
+
+    retrieveData(data => {
+      this.notes = data;
+    });
+  },
   data: function() {
     return {
       showNoteDialog: false,
       note: null,
-      notes: [
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum }
-      ]
+      notes: []
     };
   },
   methods: {
@@ -72,13 +75,15 @@ export default {
       this.showNoteDialog = false;
       this.note = null;
     },
+    createNote() {
+      this.showNoteDialog = true;
+    },
     editNote(event) {
-      console.log('editNote called with:', event);
       this.note = event;
       this.showNoteDialog = true;
     },
-    createNote() {
-      this.showNoteDialog = true;
+    deleteNote(event) {
+      db.remove(event);
     }
   }
 };

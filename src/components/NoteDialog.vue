@@ -36,7 +36,6 @@ import { v4 as uid } from 'uuid';
 var db = new PouchDB('notes');
 
 const emptyNote = function() {
-  console.log('emptyNote called');
   return {
     title: '',
     content: ''
@@ -61,7 +60,9 @@ export default {
       this.$emit('close');
     },
     saveNote: function(note) {
-      db.put({ ...note, _id: note._id || uid() });
+      const id = note._id || uid();
+      console.log('id:', id);
+      db.put({ ...note, _id: id });
       this.closeDialog();
     }
   }
