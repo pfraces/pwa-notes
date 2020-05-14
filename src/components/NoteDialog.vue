@@ -61,7 +61,6 @@ export default {
     },
     saveNote: function(note) {
       const id = note._id || uid();
-      console.log('id:', id);
       db.put({ ...note, _id: id });
       this.closeDialog();
     }

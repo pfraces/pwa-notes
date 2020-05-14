@@ -43,6 +43,32 @@ const retrieveData = function(callback) {
   });
 };
 
+const getRevision = function(changes) {
+  return parseInt(changes[0].rev.split('-')[0], 10);
+};
+
+const serverSync = function({ deleted, doc, changes }) {
+  const rev = getRevision(changes);
+
+  if (deleted) {
+    // DELETE
+    console.log('DELETE', doc._id);
+    return;
+  }
+
+  if (rev === 1) {
+    // POST
+    console.log('POST', doc);
+    return;
+  }
+
+  if (rev > 1) {
+    // PUT
+    console.log('PUT', doc);
+    return;
+  }
+};
+
 export default {
   name: 'Layout',
   components: {
@@ -52,10 +78,12 @@ export default {
   created: function() {
     db.changes({
       since: 'now',
-      live: true
-    }).on('change', () => {
+      live: true,
+      include_docs: true
+    }).on('change', change => {
       retrieveData(data => {
         this.notes = data;
+        serverSync(change);
       });
     });
 
