@@ -8,7 +8,7 @@
       <md-card-content>{{ card.content }}</md-card-content>
 
       <md-card-actions>
-        <md-button v-on:click="$emit('edit-modal', {title: card.title, content: card.content})">Edit</md-button>
+        <md-button v-on:click="$emit('edit-modal', { ...card })">Edit</md-button>
         <md-button>Delete</md-button>
       </md-card-actions>
     </md-card>
