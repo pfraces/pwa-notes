@@ -29,6 +29,7 @@
 import PouchDB from 'pouchdb-browser';
 import Board from './Board.vue';
 import NoteDialog from './NoteDialog.vue';
+import * as axios from 'axios';
 
 var db = new PouchDB('notes');
 
@@ -43,6 +44,45 @@ const retrieveData = function(callback) {
   });
 };
 
+const getRevision = function(changes) {
+  return parseInt(changes[0].rev.split('-')[0], 10);
+};
+
+const serverSync = function({ deleted, doc, changes }) {
+  const rev = getRevision(changes);
+
+  if (deleted) {
+    // DELETE
+    console.log('DELETE', doc._id);
+
+    axios.delete(`http://localhost:3000/api/notes/${doc._id}`);
+    return;
+  }
+
+  if (rev === 1) {
+    // POST
+    console.log('POST', doc);
+
+    axios.post(`http://localhost:3000/api/notes`, {
+      _id: doc._id,
+      title: doc.title,
+      content: doc.content
+    });
+    return;
+  }
+
+  if (rev > 1) {
+    // PUT
+    console.log('PUT', doc);
+
+    axios.put(`http://localhost:3000/api/notes/${doc._id}`, {
+      title: doc.title,
+      content: doc.content
+    });
+    return;
+  }
+};
+
 export default {
   name: 'Layout',
   components: {
@@ -52,10 +92,12 @@ export default {
   created: function() {
     db.changes({
       since: 'now',
-      live: true
-    }).on('change', () => {
+      live: true,
+      include_docs: true
+    }).on('change', change => {
       retrieveData(data => {
         this.notes = data;
+        serverSync(change);
       });
     });
 
