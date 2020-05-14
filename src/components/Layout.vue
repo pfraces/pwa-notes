@@ -26,11 +26,11 @@
 </style>
 
 <script>
+import PouchDB from 'pouchdb-browser';
 import Board from './Board.vue';
 import NoteDialog from './NoteDialog.vue';
 
-const loremIpsum =
-  'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error quibusdam, non molestias et! Earum magnam, similique, quo recusandae placeat dicta asperiores modi sint ea repudiandae maxime? Quae non explicabo, neque.';
+var db = new PouchDB('notes');
 
 export default {
   name: 'Layout',
@@ -38,33 +38,16 @@ export default {
     Board,
     NoteDialog
   },
+  created: function() {
+    db.allDocs({ include_docs: true, descending: true }, (err, doc) => {
+      this.notes = doc.rows.map(row => row.doc);
+    });
+  },
   data: function() {
     return {
       showNoteDialog: false,
       note: null,
-      notes: [
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum },
-        { title: 'Lorem Ipsum', content: loremIpsum }
-      ]
+      notes: []
     };
   },
   methods: {
@@ -73,7 +56,6 @@ export default {
       this.note = null;
     },
     editNote(event) {
-      console.log('editNote called with:', event);
       this.note = event;
       this.showNoteDialog = true;
     },

@@ -22,6 +22,10 @@
   display: inline-block;
   vertical-align: top;
 }
+
+.md-card-content {
+  height: 145px;
+}
 </style>
 
 <script>
