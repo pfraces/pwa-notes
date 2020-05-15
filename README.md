@@ -6,10 +6,23 @@
 git clone https://github.com/pfraces/pwa-notes
 cd pwa-notes
 npm install
-npm start
 ```
 
-Accede a la aplicación navegando a <http://localhost:8080>
+Este proyecto dispone de 2 builds (DEV y PROD):
+
+- **DEV:** No instala el service worker por lo que no se puede considerar PWA
+  pero permite un flujo de desarrollo fluído recargando los servidores al
+  detectar cambios
+- **PROD:** Instala el service worker que permite instalar la PWA como
+  aplicación de escritorio y trabajar en modo offline
+
+Comandos para ejecutar cada build y levantar los servidores:
+
+- **DEV:** `npm run start:dev`
+- **PROD:** `npm run start:prod`
+- `npm start` ejecuta el build de DEV por defecto
+
+Se puede acceder a la aplicación navegando a <http://localhost:8080>
 
 ## Objetivos
 

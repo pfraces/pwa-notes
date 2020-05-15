@@ -14,6 +14,6 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use('/api', router);
 
-server.listen(PORT, function () {
+server.listen(PORT, function() {
   console.log('Server listening on port', PORT);
 });

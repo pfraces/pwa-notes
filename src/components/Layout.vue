@@ -30,11 +30,16 @@
 
       <md-app-content>
         <Board v-bind:cards="notes" v-on:edit-note="editNote" v-on:delete-note="deleteNote" />
+
         <NoteDialog
           v-if="showNoteDialog"
           v-bind:note="note || undefined"
           v-on:close="closeNoteDialog()"
         />
+
+        <md-snackbar md-position="center" :md-duration="Infinity" md-active md-persistent>
+          <span>Network status: {{ status }}</span>
+        </md-snackbar>
       </md-app-content>
     </md-app>
   </div>
@@ -59,6 +64,8 @@ import * as axios from 'axios';
 
 var db = new PouchDB('notes');
 
+var ignoreDbChanges = 0;
+
 const retrieveLocalData = function(callback) {
   db.allDocs({ include_docs: true, descending: true }, (err, doc) => {
     if (err) {
@@ -70,9 +77,13 @@ const retrieveLocalData = function(callback) {
   });
 };
 
-const retrieveServerData = function() {
+const retrieveServerData = function(callback) {
   axios.get('http://localhost:3000/api/notes').then(function(res) {
-    db.bulkDocs(res.data);
+    ignoreDbChanges = res.data.length;
+
+    db.bulkDocs(res.data, function() {
+      retrieveLocalData(callback);
+    });
   });
 };
 
@@ -115,11 +126,24 @@ export default {
     NoteDialog
   },
   created: function() {
+    window.addEventListener('online', () => {
+      this.status = 'Online';
+    });
+
+    window.addEventListener('offline', () => {
+      this.status = 'Offline';
+    });
+
     db.changes({
       since: 'now',
       live: true,
       include_docs: true
     }).on('change', change => {
+      if (ignoreDbChanges > 0) {
+        ignoreDbChanges--;
+        return;
+      }
+
       retrieveLocalData(data => {
         this.notes = data;
         serverSync(change);
@@ -132,6 +156,7 @@ export default {
   },
   data: function() {
     return {
+      status: navigator.onLine ? 'Online' : 'Offline',
       menuVisible: false,
       showNoteDialog: false,
       note: null,
@@ -154,8 +179,10 @@ export default {
       db.remove(event);
     },
     retrieveServerData() {
-      retrieveServerData();
-      this.menuVisible = false;
+      retrieveServerData(data => {
+        this.notes = data;
+        this.menuVisible = false;
+      });
     }
   }
 };
