@@ -49,15 +49,20 @@ Resolver dudas sobre el enfoque Offline-First
 - [ ] Experiencia de usuario en cada modo
 - [ ] Funcionalidades disponibles en cada modo
 
-## PoC Stack
+## Tecnologías usadas
 
-### Client
+### Cliente
 
-- [Vue](https://vuejs.org/v2/guide/)
-- [Vue Material](https://vuematerial.io/getting-started)
-- [PouchDB](https://pouchdb.com/getting-started.html)
+- [Vue](https://vuejs.org/)
+- [Vue Material](https://vuematerial.io/)
+- [PouchDB](https://pouchdb.com/)
 
-### Server
+### Servidor
 
-- [Express](https://expressjs.com/en/guide/routing.html)
+- [Express](https://expressjs.com)
 - [LowDB](https://github.com/typicode/lowdb)
+
+## Referencias
+
+- [Build an offline-first, data-driven PWA](https://codelabs.developers.google.com/codelabs/workbox-indexeddb/index.html)
+- [PouchDB - Getting Started](https://pouchdb.com/getting-started.html)
