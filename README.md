@@ -1,4 +1,6 @@
-# PWA Offline-First PoC
+# PWA Notes
+
+Prueba de concepto de una aplicación PWA Offline-First
 
 ## Primeros pasos
 
@@ -61,6 +63,10 @@ Resolver dudas sobre el enfoque Offline-First
 
 - [Express](https://expressjs.com)
 - [LowDB](https://github.com/typicode/lowdb)
+
+## Documentación
+
+- [PWA - Progressive Web Applications](doc/pwa/index.md)
 
 ## Referencias
 
