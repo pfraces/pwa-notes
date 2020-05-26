@@ -1,21 +1,13 @@
-# PWA - Progressive Web Applications
+# PWAs - Progressive Web Applications
 
 ![pwa](pwa.png)
 
-Las aplicaciones web progresivas usan las APIs web modernas junto a una
-estrategia de mejoras progresivas para crear aplicaciones multi-plataforma.
-Estas apps funcionan en todos los dispositivos y ofrecen varias características
-que brindan al usuario las mismas ventajas y mejoras que las aplicaciones
-nativas.
+## [Introducción](introduction.md)
 
-## Introducción
-
-- [ ] Qué es?
-- [ ] Qué aporta?
-
-### Offline First
-
-- [ ] En qué se basa esta metodología?
+- ¿Qué es una Progressive Web App?
+- ¿Qué hace a una aplicacion ser una PWA?
+- Ventajas
+- Offline-First
 
 ## Instalación
 
