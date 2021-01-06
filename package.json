@@ -12,7 +12,7 @@
     "start:prod": "concurrently --kill-others \"npm run client:prod\" \"npm run server:prod\""
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "material-design-icons-iconfont": "^5.0.1",
     "pouchdb-browser": "^7.2.1",
     "pouchdb-live-find": "^0.4.0",
